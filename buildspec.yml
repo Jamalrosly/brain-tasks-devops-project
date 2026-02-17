@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing kubectl
+      - curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.34.0/2024-01-04/bin/linux/amd64/kubectl
+      - chmod +x kubectl
+      - mv kubectl /usr/local/bin/
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 292622099037.dkr.ecr.ap-south-1.amazonaws.com
+
+  build:
+    commands:
+      - echo Building Docker image
+      - docker build -t brain-tasks-app .
+      - docker tag brain-tasks-app:latest 292622099037.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
+
+  post_build:
+    commands:
+      - echo Pushing image to ECR
+      - docker push 292622099037.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
+      - echo Updating kubeconfig
+      - aws eks update-kubeconfig --region ap-south-1 --name brain-eks-cluster
+      - kubectl apply -f deployment.yaml
+      - kubectl apply -f service.yaml
