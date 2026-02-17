@@ -31,8 +31,6 @@ phases:
       - echo Updating kubeconfig
       - aws eks update-kubeconfig --region ap-south-1 --name brain-eks-cluster
       - echo Deploying to EKS
-      - kubectl apply -f deployment.yaml
-      - kubectl apply -f service.yaml
-
-
+      - kubectl apply -f deployment.yaml --validate=false
+      - kubectl apply -f service.yaml --validate=false
 
