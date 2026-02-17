@@ -26,11 +26,13 @@ phases:
     commands:
       - echo WHOAMI
       - aws sts get-caller-identity
-      - echo Pushing image to ECR
-      - docker push 292622099037.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
+      - echo AWS_REGION=$AWS_REGION
+      - echo Listing clusters
+      - aws eks list-clusters --region ap-south-1
       - echo Updating kubeconfig
       - aws eks update-kubeconfig --region ap-south-1 --name brain-eks-cluster
-      - echo Deploying to EKS
+      - kubectl config get-contexts
+      - kubectl config current-context
       - kubectl apply -f deployment.yaml --validate=false
       - kubectl apply -f service.yaml --validate=false
 
