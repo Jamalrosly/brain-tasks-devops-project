@@ -24,6 +24,8 @@ phases:
 
   post_build:
     commands:
+      - echo WHOAMI
+      - aws sts get-caller-identity
       - echo Pushing image to ECR
       - docker push 292622099037.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
       - echo Updating kubeconfig
@@ -31,5 +33,6 @@ phases:
       - echo Deploying to EKS
       - kubectl apply -f deployment.yaml
       - kubectl apply -f service.yaml
+
 
 
