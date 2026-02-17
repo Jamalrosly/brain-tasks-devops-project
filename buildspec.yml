@@ -27,8 +27,6 @@ phases:
       - echo WHOAMI
       - aws sts get-caller-identity
       - echo AWS_REGION=$AWS_REGION
-      - echo Listing clusters
-      - aws eks list-clusters --region ap-south-1
       - echo Updating kubeconfig
       - aws eks update-kubeconfig --region ap-south-1 --name brain-eks-cluster
       - kubectl config get-contexts
