@@ -20,10 +20,13 @@ phases:
       - docker tag brain-tasks-app:latest 292622099037.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
 
   post_build:
-  commands:
-    - echo Updating kubeconfig
-    - aws eks update-kubeconfig --region ap-south-1 --name brain-eks-cluster
-    - echo Deploying to EKS
-    - kubectl apply -f deployment.yaml
-    - kubectl apply -f service.yaml
+    commands:
+      - echo Pushing image to ECR
+      - docker push 292622099037.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
+      - echo Updating kubeconfig
+      - aws eks update-kubeconfig --region ap-south-1 --name brain-eks-cluster
+      - echo Deploying to EKS
+      - kubectl apply -f deployment.yaml
+      - kubectl apply -f service.yaml
+
 
